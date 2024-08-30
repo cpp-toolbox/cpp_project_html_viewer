@@ -113,10 +113,17 @@ def copy_static_files(script_root, output_dir):
             print(f'{src_file} does not exist and was not copied.')
 
 
+def create_zip_archive(output_dir):
+    """Create a zip archive of the output directory."""
+    shutil.make_archive(output_dir, 'zip', output_dir)
+    print(f'Created zip archive {output_dir}.zip')
+
+
 def main():
     parser = argparse.ArgumentParser(description="Generate HTML files for code browsing.")
     parser.add_argument('source_dir', help="Source directory containing code files.")
     parser.add_argument('output_dir', help="Output directory for HTML files.")
+    parser.add_argument('--zip', action='store_true', help="Create a zip archive of the output directory.")
     args = parser.parse_args()
 
     base_source_dir = args.source_dir
@@ -138,6 +145,9 @@ def main():
 
     # Copy static files
     copy_static_files(script_root, base_output_dir)
+
+    if args.zip:
+        create_zip_archive(base_output_dir)
 
     print('Processing complete.')
 
